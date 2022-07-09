@@ -14,7 +14,7 @@ print()
 
 extra_flavor = ("Explain why you're still a good person.",
                 "Remind readers to like and subscribe.")
-users_sin = "I drove a hotdog through a clothing store, stole all the clothes, and then ranted about porn"
+users_sin = "I crashed my car into a bridge"
 temp = .99
 max_tokens = 4000
 url = 'https://api.openai.com/v1/completions'
@@ -24,15 +24,22 @@ requestObj = {"model": "text-davinci-002",
 apology = requests.post('https://api.openai.com/v1/completions', json=requestObj, headers={
                         'Authorization': 'Bearer ' + os.environ.get("api-key")}).json()
 
+apology_string = str(apology["choices"][0]["text"])
 
-print(apology["choices"][0]["text"])
+# print(str(apology["choices"][0]["text"]))
 
-# print(type(apology))
+apology_line_breaks = ""
+for index, char in enumerate(apology_string):
+    apology_line_breaks += char
+    if index % 60 == 0:
+        apology_line_breaks += "\n"
+
 
 # DRAW ON TO AN IMAGE
 
-# img = Image.open("notes.jpg")
-# drawImg = ImageDraw.Draw(img)
-# myFont = ImageFont.truetype('SF.otf', 75)
-# drawImg.text((100, 260), text=apology, font=myFont, fill=(14, 14, 14))
-# img.show()
+img = Image.open("notes.jpg")
+drawImg = ImageDraw.Draw(img)
+myFont = ImageFont.truetype('SF.otf', 45)
+drawImg.text((85, 180), text=apology_line_breaks,
+             font=myFont, fill=(24, 24, 24))
+img.show()
